@@ -24,3 +24,24 @@
 .btn-link.pip-button:active {
     opacity: 1;
 }
+
+.netflix-pip {
+		background: none;
+		width: 100px;
+		height: 100px;
+		position: absolute;
+		z-index: 2;
+		top: 2.5em;
+		right: 2.5em;
+		width: 4em;
+		height: 4em;
+		border-radius: 100%;
+		opacity: 0;
+		transition: all 0.5s ease-out;
+		transition-delay: 0.5s;
+		cursor: pointer;
+}
+
+body:hover > .netflix-pip {
+  opacity: 0.8;
+}
