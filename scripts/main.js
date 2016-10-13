@@ -55,7 +55,10 @@
 	        document.querySelector('.player-status').appendChild(pipButton);
         } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
             controlsWrapper.appendChild(pipButton);
-        }
+        } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
+            document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
+   
+            }
         
 
         
@@ -193,6 +196,21 @@
                     netflixContainer: '#appMountPoint',
                     videoClassObserver: 'player-menu'
                 }
+            },
+            {
+                name: 'weather',
+                testPattern: /(weather\.com|www\.weather\.com|www\.imrworldwide\.com|imrworldwide\.com)/,
+                customLoadEvent: {
+                    name: 'initialized',
+                    method: findVideos,
+                    loaded: false
+                },
+                elementType: 'button',
+                videoSelector: 'video.akamai-html5',
+                buttonClassList: 'akamai-button pip-button akamaiJ',
+                videoParentClass: '.akamai-video',
+                controlsWrapperClass: '.akamai-controls',
+                customClasses: null
             }
         ];
         
