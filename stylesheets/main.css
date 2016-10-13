@@ -44,3 +44,33 @@
 body:hover > .netflix-pip {
   opacity: 0.8;
 }
+
+.fred {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 9999999999;
+	width: 100px;
+	height: 100px;
+	background: red;
+}
+
+.akamaiJ {
+	width: 25px;
+height: 15px;
+top: 50%;
+margin-top: -7px;
+border: none;
+background-color: rgba(0, 0, 0, 0) !important;
+display: block;
+right: 150px;
+right: 130px;
+height: 35px;
+top: 7px;
+opacity: 0.2;
+position: absolute;
+}
+
+.akamaij:hover {
+	opacity: 1;
+}
