@@ -8,7 +8,7 @@ Pied PíPer is a Safari 10 extension that will add a PiP button for Netflix, Dai
 4. Enjoy!
 
 ## Improvements
-- Suggestions?
+- Suggestions?  [@joekuhns](https://twitter.com/joekuhns)
 
 ## Changelog
 ### Version 1.90 (Joe's Fork)
