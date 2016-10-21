@@ -13,9 +13,12 @@
             <string>1.90</string>
             <key>CFBundleShortVersionString</key>
             <string>1.90</string>
+            <key>Update From Gallery</key>
+            <true/>
             <key>URL</key>
             <string>https://joekuhns.github.io/PiedPiPer.safariextension/PiedP%C3%ADPer.safariextz</string>
         </dict>
     </array>
+
 </dict>
 </plist>
