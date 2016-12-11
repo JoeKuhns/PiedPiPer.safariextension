@@ -10,6 +10,20 @@
             <key>Developer Identifier</key>
             <string>3AY32522EW</string>
             <key>CFBundleVersion</key>
+            <string>1.100</string>
+            <key>CFBundleShortVersionString</key>
+            <string>1.100</string>
+            <key>Update From Gallery</key>
+            <true/>
+            <key>URL</key>
+            <string>https://joekuhns.github.io/PiedPiPer.safariextension/PiedP%C3%ADPer.safariextz</string>
+        </dict>
+        <dict>
+            <key>CFBundleIdentifier</key>
+            <string>com.meridianprinting.safari.PiedPiPr</string>
+            <key>Developer Identifier</key>
+            <string>3AY32522EW</string>
+            <key>CFBundleVersion</key>
             <string>1.90</string>
             <key>CFBundleShortVersionString</key>
             <string>1.90</string>
