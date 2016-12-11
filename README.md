@@ -11,6 +11,9 @@ Pied PíPer is a Safari 10 extension that will add a PiP button for Netflix, Dai
 - Suggestions?  [@joe_kuhns](https://twitter.com/joe_kuhns)
 
 ## Changelog
+### Version 1.100 (AlejandroJL Fork)
+- Added initial Realmadrid TV support
+
 ### Version 1.90 (Joe's Fork)
 - Made Uppdating work.  Now any available updates will show up in the safari extension panel.
 - Also fixed it so the plugin only fires on appropriate domains (netflix, youtube, dailymotion, plex).

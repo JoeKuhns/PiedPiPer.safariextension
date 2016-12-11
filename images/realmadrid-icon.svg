@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="13px" viewBox="0 0 18 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>realmadrid-icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-12.000000, -9.000000)">
+            <g id="realmadrid-icon" transform="translate(12.000000, 8.000000)">
+                <path d="M14.25,4.375 L8.25,4.375 L8.25,8.125 L14.25,8.125 L14.25,4.375 Z M15.75,1.875 L2.25,1.875 C1.425,1.875 0.75,2.4375 0.75,3.125 L0.75,11.875 C0.75,12.5625 1.425,13.1125 2.25,13.1125 L15.75,13.1125 C16.575,13.1125 17.25,12.5625 17.25,11.875 L17.25,3.125 C17.25,2.4375 16.575,1.875 15.75,1.875 Z M15.75,11.88125 L2.25,11.88125 L2.25,3.1125 L15.75,3.1125 L15.75,11.88125 L15.75,11.88125 Z" id="Shape" fill="#FFFFFF"></path>
+                <polygon id="Shape" points="0 0 18 0 18 15 0 15"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
