@@ -1,5 +1,7 @@
 (function () {
     'use strict';
+    
+//     monitorEvents(window);
 
     var resources,
         currentResource,
@@ -7,6 +9,8 @@
         findVideos,
         plexObserver,
         plexObserverTrigger,
+        amazonObserver,
+        amazonObserverTrigger,
         netflixObserver,
         netflixObserverTrigger,
         initPiPTool;
@@ -58,7 +62,11 @@
         } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
             document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
    
-            }
+        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
+	        document.body.appendChild(pipButton);
+	        console.log('Its Amazon');
+// 	        document.querySelector('.player-status').appendChild(pipButton);
+        }
         
 
         
@@ -103,6 +111,50 @@
 		    subtree:true
         });
     };
+
+
+
+
+
+
+    /** The method used to listen and trigger the event of finding the videos */
+    amazonObserver = function (mutations) {
+	    console.log(mutations);
+        mutations.forEach(function (mutation) {
+            var addedNodesIterator;
+
+            for (addedNodesIterator = 0; addedNodesIterator < mutation.addedNodes.length; addedNodesIterator++) {
+                if (mutation.addedNodes[addedNodesIterator].classList && mutation.addedNodes[addedNodesIterator].classList.contains(currentResource.customClasses.videoClassObserver)) {
+                    findVideos();
+                }
+            }
+        });
+    };
+
+    /** The trigger of the Plex Observer */
+    amazonObserverTrigger = function () {
+
+	        console.log('Its Amazon');
+
+
+        var observer;
+
+        /** @type {MutationObserver} Initialize an observer */
+        observer = new MutationObserver(amazonObserver);
+
+        /** Set the observer */
+        observer.observe(document.querySelector(currentResource.customClasses.amazonContainer), {
+			childList: true, 
+		    subtree:true
+        });
+    };
+
+
+
+
+
+
+
 
     /** The method used to listen and trigger the event of finding the videos */
     plexObserver = function (mutations) {
@@ -211,6 +263,24 @@
                 videoParentClass: '.akamai-video',
                 controlsWrapperClass: '.akamai-controls',
                 customClasses: null
+            },
+            {
+                name: 'amazon',
+                testPattern: /(amazon\.com|www\.amazon\.com)/,
+                customLoadEvent: {
+                    name: 'load',
+                    method: amazonObserverTrigger,
+                    loaded: false
+                },
+                elementType: 'button',
+                videoSelector: 'video',
+                buttonClassList: 'ytp-button pip-button',
+                videoParentClass: '.rendererContainer',
+                controlsWrapperClass: '.controlsOverlayTopRight',
+                customClasses: {
+                    amazonContainer: '#dv-player-content',
+                    videoClassObserver: 'rendererContainer'
+                }
             }
         ];
         
