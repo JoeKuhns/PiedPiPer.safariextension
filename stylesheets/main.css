@@ -3,6 +3,13 @@
     transform: scale(0.7);
 }
 
+.ytp-big-mode .ytp-button.pip-button img {
+    transform: scale(1.6);
+    position: relative;
+    top: -4px;
+    left: 10px;
+}
+
 .dmp_ControlBarButton.pip-button {
     -webkit-transform: scale(0.7);
     transform: scale(0.7);
