@@ -3,6 +3,17 @@
     transform: scale(0.7);
 }
 
+
+// Temp for namazon video
+
+button.ytp-button.pip-button {
+	position: absolute;
+top: 5px;
+
+left: 5px;
+z-index: 99999999999;
+}
+
 .ytp-big-mode .ytp-button.pip-button img {
     transform: scale(1.6);
     position: relative;
