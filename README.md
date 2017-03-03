@@ -2,7 +2,7 @@
 Pied PíPer is a Safari 10 extension that will add a PiP button for Netflix, DailyMotion, Youtube, and the Plex web interface.  Weather.com, nbc.com, msnbc and others coming soon (weather.com is done, but NBC is a pain).
 
 ## Installation
-1. Download the extension https://joekuhns.github.io/PiedPiPer.safariextension/PiedP%C3%ADPer.safariextz.
+1. Download the extension https://joekuhns.github.io/PiedPiPer.safariextension/PiedPiPer.safariextz.
 2. Open the downloaded file
 3. Click trust
 4. Enjoy!
