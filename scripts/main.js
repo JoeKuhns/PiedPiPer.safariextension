@@ -14,6 +14,18 @@
         netflixObserver,
         netflixObserverTrigger,
         initPiPTool;
+        
+//         THIS IS THE SHOW HIDE FUNCTION FOR AMAZON
+
+
+function shower() {
+    document.getElementById('piper').style.visibility = "visible";
+  }
+  function hider() {
+    document.getElementById('piper').style.visibility = "hidden";
+  }
+        
+        
 
     /**
      * Add the PiP event and button to a given video
@@ -26,48 +38,65 @@
             controlsWrapper;
 
         /** @type {Object} The video to be switched */
-        video = videoWrapper.querySelector(currentResource.videoSelector);
-
-        /** @type {Object} The PiP button */
-        pipButton = document.createElement(currentResource.elementType);
-        pipButton.classList = currentResource.buttonClassList;
-        pipButton.title = 'PiP Mode';
-
-        /** @type {Object} The icon shown in the PiP button */
-        pipImage = document.createElement('img');
-        pipImage.src = safari.extension.baseURI + 'images/' + currentResource.name + '-icon.svg';
-
-        pipButton.appendChild(pipImage);
+        setTimeout(function(){
+	        
+	        video = videoWrapper.querySelector(currentResource.videoSelector);
         
-        pipButton.addEventListener('click', function (event) {
-            event.preventDefault();
-
-            /** Swap the PiP mode */
-            if ('inline' === video.webkitPresentationMode) {
-                video.webkitSetPresentationMode('picture-in-picture');
-            } else {
-                video.webkitSetPresentationMode('inline');
-            }
-        });
-
+	        if (currentResource.name == 'amazon') {
+	// 	        video = videoWrapper.querySelectorAll(currentResource.videoSelector);
+	        } 
+	        
+	        console.log(video);
+	
+	        /** @type {Object} The PiP button */
+	        pipButton = document.createElement(currentResource.elementType);
+	        pipButton.classList = currentResource.buttonClassList;
+	        pipButton.title = 'PiP Mode';
+	
+	        /** @type {Object} The icon shown in the PiP button */
+	        pipImage = document.createElement('img');
+	        pipImage.src = safari.extension.baseURI + 'images/' + currentResource.name + '-icon.svg';
+	
+	        pipButton.appendChild(pipImage);
+	        
+	        pipButton.addEventListener('click', function (event) {
+	            event.preventDefault();
+	
+	            /** Swap the PiP mode */
+	            if ('inline' === video.webkitPresentationMode) {
+	                video.webkitSetPresentationMode('picture-in-picture');
+	            } else {
+	                video.webkitSetPresentationMode('inline');
+	            }
+	        });
+	
+	        
+	
+		    controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
+	
+	        if (currentResource.name == 'netflix' && document.body.querySelectorAll('.pip-button').length < 1) {
+	// 	        document.body.appendChild(pipButton);
+		        document.querySelector('.player-status').appendChild(pipButton);
+	        } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
+	            controlsWrapper.appendChild(pipButton);
+	        } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
+	            document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
+	   
+	        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
+		        pipButton.id = 'piper';
+	
+		        document.body.appendChild(pipButton);
+		        console.log('Its Amazon');
+		        
+		        document.body.addEventListener('mouseover',function() { shower() },true);
+		        document.body.addEventListener('mouseout',function() { hider() },true);
+	
+	
+	        }
         
 
-	    controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
-
-        if (currentResource.name == 'netflix' && document.body.querySelectorAll('.pip-button').length < 1) {
-// 	        document.body.appendChild(pipButton);
-	        document.querySelector('.player-status').appendChild(pipButton);
-        } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
-            controlsWrapper.appendChild(pipButton);
-        } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
-            document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
-   
-        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
-	        document.body.appendChild(pipButton);
-	        console.log('Its Amazon');
-// 	        document.querySelector('.player-status').appendChild(pipButton);
-        }
-        
+	        
+        }, 50)
 
         
     };
@@ -79,11 +108,15 @@
 
         /** Fetch all the video elements */
         videoWrappers = document.querySelectorAll(currentResource.videoParentClass);
+        
+        console.log(videoWrappers);
 
         for (videoWrapperIterator = 0; videoWrapperIterator < videoWrappers.length; videoWrapperIterator++) {
             addPipButtons(videoWrappers[videoWrapperIterator]);
         }
     };
+    
+    
 
     /** The method used to listen and trigger the event of finding the videos */
     netflixObserver = function (mutations) {
@@ -119,7 +152,7 @@
 
     /** The method used to listen and trigger the event of finding the videos */
     amazonObserver = function (mutations) {
-	    console.log(mutations);
+// 	    console.log(mutations);
         mutations.forEach(function (mutation) {
             var addedNodesIterator;
 
@@ -135,6 +168,8 @@
     amazonObserverTrigger = function () {
 
 	        console.log('Its Amazon');
+	        
+// 	        addPipButtons(document.body);
 
 
         var observer;
@@ -274,7 +309,7 @@
                 },
                 elementType: 'button',
                 videoSelector: 'video',
-                buttonClassList: 'ytp-button pip-button',
+                buttonClassList: 'ytp-button pip-button amazon-pip',
                 videoParentClass: '.rendererContainer',
                 controlsWrapperClass: '.controlsOverlayTopRight',
                 customClasses: {
