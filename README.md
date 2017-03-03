@@ -15,6 +15,7 @@ Pied PíPer is a Safari 10 extension that will add a PiP button for Netflix, Dai
 - Fixed youtube fullscreen icon
 - youtube now works on embedded videos
 - Added support for AMAZON video! (still early and possibly buggy)
+- Hopefully fixed reliability with the install itself. Made the plist more compliant.  With luck the extension will now stay installed.
 
 ### Version 1.90
 - Made Uppdating work.  Now any available updates will show up in the safari extension panel.
