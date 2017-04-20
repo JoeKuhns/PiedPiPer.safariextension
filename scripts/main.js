@@ -54,10 +54,14 @@ function shower() {
 	        pipButton.title = 'PiP Mode';
 	
 	        /** @type {Object} The icon shown in the PiP button */
-	        pipImage = document.createElement('img');
-	        pipImage.src = safari.extension.baseURI + 'images/' + currentResource.name + '-icon.svg';
-	
-	        pipButton.appendChild(pipImage);
+            if (currentResource.name == 'youtube') { 
+                // svg must be inserted inline, otherwise youtube css style properties won't be inherited
+                pipButton.innerHTML = '<svg version="1.1" viewBox="0 0 36 36" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-90"></use><path class="ytp-svg-fill" d="M31,21v7H19v-7H31z M9,11h18v8h2v-8c0-1.1-0.9-2-2-2H9c-1.1,0-2,0.9-2,2v12c0,1.1,0.9,2,2,2h8v-2H9V11zM15,15.4l-3.6-3.5L10,13.3l3.7,3.7H11v2h4h2v-2v-4h-2V15.4z" id="ytp-svg-90"></path></svg>';
+            } else {
+                pipImage = document.createElement('img');
+                pipImage.src = safari.extension.baseURI + 'images/' + currentResource.name + '-icon.svg';
+                pipButton.appendChild(pipImage);                
+            }
 	        
 	        pipButton.addEventListener('click', function (event) {
 	            event.preventDefault();
@@ -78,7 +82,12 @@ function shower() {
 	// 	        document.body.appendChild(pipButton);
 		        document.querySelector('.player-status').appendChild(pipButton);
 	        } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
-	            controlsWrapper.appendChild(pipButton);
+                if (currentResource.name == 'youtube') {
+                    // insert between airplay and fullscreen icon
+                    controlsWrapper.insertBefore(pipButton, controlsWrapper.childNodes[controlsWrapper.childNodes.length-1]);
+                } else {
+                    controlsWrapper.appendChild(pipButton);
+                }
 	        } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
 	            document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
 	   
