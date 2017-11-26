@@ -36,8 +36,15 @@
 	             video = videoWrapper.querySelectorAll(currentResource.videoSelector);
 
 	            // If the amazon video isn't there yet recursively search for it
-	            if (video == null || video.length == 0 || video[video.length-1].style.visibility == 'hidden' || video[video.length-1].width == '1px') {
-	                addPipButtons(videoWrapper, ++recursive_call);
+	            if (video == null || video.length == 0 // Retry if video or its length is invalid
+					|| video[video.length-1].style.visibility == 'hidden' // Retry if the video is hidden
+					|| video[video.length-1].width == '1px' // Retry if the video is only 1 px wide
+					|| video[video.length-1].src.indexOf('videorolls') !== -1) { // Ignore video pre rolls (ads)
+
+					// Abort searching for a video after 500 retries
+	                if (recursive_call < 500) {
+						addPipButtons(videoWrapper, ++recursive_call);
+					}
 	                return;
 	            }
 
@@ -46,6 +53,12 @@
 	        }
 
 	        console.log(video);
+
+			// Remove all previously added pip buttons
+			var oldButtons = document.body.querySelectorAll('.pip-button');
+			Array.prototype.forEach.call( oldButtons, function( node ) {
+				node.parentNode.removeChild( node );
+			});
 
 	        /** @type {Object} The PiP button */
 	        pipButton = document.createElement(currentResource.elementType);
@@ -86,7 +99,7 @@
 	            var hideableAmazonButtons = document.getElementsByClassName('hideableTopButtons');
 	            if (hideableAmazonButtons != null && hideableAmazonButtons.length > 0) {
 	                hideableAmazonButtons[0].firstChild.insertBefore(pipButton, hideableAmazonButtons[0].firstChild.firstChild);
-	//                console.log('Amazon PiP button added');
+	                console.log('Amazon PiP button added');
 	            }
 	        }
 
@@ -147,32 +160,22 @@
 
     /** The method used to listen and trigger the event of finding the videos */
     amazonObserver = function (mutations) {
-//        console.log(mutations);
         mutations.forEach(function (mutation) {
             var addedNodesIterator;
 
-            for (addedNodesIterator = 0; addedNodesIterator < mutation.addedNodes.length; addedNodesIterator++) {
-
-                if (mutation.addedNodes[addedNodesIterator].classList && mutation.addedNodes[addedNodesIterator].classList.contains(currentResource.customClasses.videoClassObserver)) {
-                    console.log('finding videos');
-                    findVideos();
-                }
-            }
+			if (mutation.target.classList.contains(currentResource.customClasses.videoClassObserver) && mutation.addedNodes.length > 0) {
+				findVideos();
+			}
         });
     };
 
     /** The trigger of the Plex Observer */
     amazonObserverTrigger = function () {
 
-	        console.log('Its Amazon');
-
-// 	        addPipButtons(document.body);
-
-
-        var observer;
+        console.log('Its Amazon');
 
         /** @type {MutationObserver} Initialize an observer */
-        observer = new MutationObserver(amazonObserver);
+        var observer = new MutationObserver(amazonObserver);
 
         /** Set the observer */
         observer.observe(document.querySelector(currentResource.customClasses.amazonContainer), {
@@ -311,7 +314,7 @@
                 controlsWrapperClass: '.controlsOverlayTopRight',
                 customClasses: {
                     amazonContainer: '#dv-web-player',
-                    videoClassObserver: 'cascadesContainer'
+                    videoClassObserver: 'rendererContainer'
                 }
             }
         ];
