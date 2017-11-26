@@ -50,22 +50,30 @@
 
 .amazon-pip {
 	z-index: 99999999999;
-	background: white;
-	width: 50px;
-	height: 50px;
-	position: absolute;
+	width: 70px;
+	height: 70px;
+	position: relative;
 	display: block;
-/* 	top: 10px; */
-/* 	left: 10px; */
-	left: calc(50% - 15px);
-	visibility: hidden;
-	bottom: 10px;
-/* 	width: 100%; */
 	text-align: center;
 	background:none;
 	border: none;
 	outline: none;
-	visibility: hidden;
+	visibility: visible;
+	padding-right: 27px;
+	opacity: 0.8;
+}
+
+.amazon-pip:hover {
+	opacity: 1;
+}
+
+.amazon-pip:hover:after {
+	position:absolute;
+	bottom: -35px;
+	left:-15px;
+	font-size: 26px;
+	color: #fff;
+	content: "PiP Mode";
 }
 
 .amazon-pip img {

@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    
+
 //     monitorEvents(window);
 
     var resources,
@@ -14,24 +14,14 @@
         netflixObserver,
         netflixObserverTrigger,
         initPiPTool;
-        
-//         THIS IS THE SHOW HIDE FUNCTION FOR AMAZON
 
-
-function shower() {
-    document.getElementById('piper').style.visibility = "visible";
-  }
-  function hider() {
-    document.getElementById('piper').style.visibility = "hidden";
-  }
-        
-        
 
     /**
      * Add the PiP event and button to a given video
      * @param {Object} videoWrapper Video element to process
+     * @param {int} recursive_call an integer which counts how often the function called itself (used for amazon video)
      */
-    addPipButtons = function (videoWrapper) {
+    addPipButtons = function (videoWrapper, recursive_call = 0) {
         var pipButton,
             pipImage,
             video,
@@ -39,29 +29,38 @@ function shower() {
 
         /** @type {Object} The video to be switched */
         setTimeout(function(){
-	        
+
 	        video = videoWrapper.querySelector(currentResource.videoSelector);
-        
+
 	        if (currentResource.name == 'amazon') {
-	// 	        video = videoWrapper.querySelectorAll(currentResource.videoSelector);
-	        } 
-	        
+	             video = videoWrapper.querySelectorAll(currentResource.videoSelector);
+
+	            // If the amazon video isn't there yet recursively search for it
+	            if (video == null || video.length == 0 || video[video.length-1].style.visibility == 'hidden' || video[video.length-1].width == '1px') {
+	                addPipButtons(videoWrapper, ++recursive_call);
+	                return;
+	            }
+
+	            console.log('Recursive call '+recursive_call+' found an amazon video!');
+	            var video = video[video.length-1];
+	        }
+
 	        console.log(video);
-	
+
 	        /** @type {Object} The PiP button */
 	        pipButton = document.createElement(currentResource.elementType);
 	        pipButton.classList = currentResource.buttonClassList;
 	        pipButton.title = 'PiP Mode';
-	
+
 	        /** @type {Object} The icon shown in the PiP button */
 	        pipImage = document.createElement('img');
 	        pipImage.src = safari.extension.baseURI + 'images/' + currentResource.name + '-icon.svg';
-	
+
 	        pipButton.appendChild(pipImage);
-	        
+
 	        pipButton.addEventListener('click', function (event) {
 	            event.preventDefault();
-	
+
 	            /** Swap the PiP mode */
 	            if ('inline' === video.webkitPresentationMode) {
 	                video.webkitSetPresentationMode('picture-in-picture');
@@ -69,36 +68,32 @@ function shower() {
 	                video.webkitSetPresentationMode('inline');
 	            }
 	        });
-	
-	        
-	
-		    controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
-	
+
+
+	        controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
+
 	        if (currentResource.name == 'netflix' && document.body.querySelectorAll('.pip-button').length < 1) {
 	// 	        document.body.appendChild(pipButton);
-		        document.querySelector('.player-status').appendChild(pipButton);
+	            document.querySelector('.player-status').appendChild(pipButton);
 	        } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
 	            controlsWrapper.appendChild(pipButton);
 	        } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
 	            document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
-	   
-	        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
-		        pipButton.id = 'piper';
-	
-		        document.body.appendChild(pipButton);
-		        console.log('Its Amazon');
-		        
-		        document.body.addEventListener('mouseover',function() { shower() },true);
-		        document.body.addEventListener('mouseout',function() { hider() },true);
-	
-	
-	        }
-        
 
-	        
+	        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
+	            pipButton.id = 'piper';
+
+	            var hideableAmazonButtons = document.getElementsByClassName('hideableTopButtons');
+	            if (hideableAmazonButtons != null && hideableAmazonButtons.length > 0) {
+	                hideableAmazonButtons[0].firstChild.insertBefore(pipButton, hideableAmazonButtons[0].firstChild.firstChild);
+	//                console.log('Amazon PiP button added');
+	            }
+	        }
+
+
         }, 50)
 
-        
+
     };
 
     /** Find the videos according to the current resource options */
@@ -108,15 +103,15 @@ function shower() {
 
         /** Fetch all the video elements */
         videoWrappers = document.querySelectorAll(currentResource.videoParentClass);
-        
+
         console.log(videoWrappers);
 
         for (videoWrapperIterator = 0; videoWrapperIterator < videoWrappers.length; videoWrapperIterator++) {
             addPipButtons(videoWrappers[videoWrapperIterator]);
         }
     };
-    
-    
+
+
 
     /** The method used to listen and trigger the event of finding the videos */
     netflixObserver = function (mutations) {
@@ -140,7 +135,7 @@ function shower() {
 
         /** Set the observer */
         observer.observe(document.querySelector(currentResource.customClasses.netflixContainer), {
-			childList: true, 
+			childList: true,
 		    subtree:true
         });
     };
@@ -152,12 +147,14 @@ function shower() {
 
     /** The method used to listen and trigger the event of finding the videos */
     amazonObserver = function (mutations) {
-// 	    console.log(mutations);
+//        console.log(mutations);
         mutations.forEach(function (mutation) {
             var addedNodesIterator;
 
             for (addedNodesIterator = 0; addedNodesIterator < mutation.addedNodes.length; addedNodesIterator++) {
+
                 if (mutation.addedNodes[addedNodesIterator].classList && mutation.addedNodes[addedNodesIterator].classList.contains(currentResource.customClasses.videoClassObserver)) {
+                    console.log('finding videos');
                     findVideos();
                 }
             }
@@ -168,7 +165,7 @@ function shower() {
     amazonObserverTrigger = function () {
 
 	        console.log('Its Amazon');
-	        
+
 // 	        addPipButtons(document.body);
 
 
@@ -179,7 +176,7 @@ function shower() {
 
         /** Set the observer */
         observer.observe(document.querySelector(currentResource.customClasses.amazonContainer), {
-			childList: true, 
+			childList: true,
 		    subtree:true
         });
     };
@@ -301,7 +298,7 @@ function shower() {
             },
             {
                 name: 'amazon',
-                testPattern: /(amazon\.com|www\.amazon\.com)/,
+                testPattern: /(amazon\.com|www\.amazon\.com|amazon\.de|www\.amazon\.de)/,
                 customLoadEvent: {
                     name: 'load',
                     method: amazonObserverTrigger,
@@ -313,12 +310,12 @@ function shower() {
                 videoParentClass: '.rendererContainer',
                 controlsWrapperClass: '.controlsOverlayTopRight',
                 customClasses: {
-                    amazonContainer: '#dv-player-content',
-                    videoClassObserver: 'rendererContainer'
+                    amazonContainer: '#dv-web-player',
+                    videoClassObserver: 'cascadesContainer'
                 }
             }
         ];
-        
+
 
         /** @type {Object} An object keeping the current platform options */
         currentResource = null;
@@ -342,5 +339,3 @@ function shower() {
 
     initPiPTool();
 }());
-
-
