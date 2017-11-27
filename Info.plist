@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.95</string>
+	<string>2.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.95</string>
+	<string>2.0</string>
 	<key>Companion Bundle Identifier</key>
 	<array>
 		<string>com.meridianprinting.safari.PiedPiPr</string>
@@ -49,10 +49,14 @@
 			<string>https://*.amazon.com/*</string>
 			<string>http://*.amazon.de/*</string>
 			<string>https://*.amazon.de/*</string>
+			<string>http://realmadrid.com</string>
+			<string>http://*.realmadrid.com</string>
+			<string>https://realmadrid.com</string>
+			<string>https://*.realmadrid.com</string>
 		</array>
 	</dict>
 	<key>Description</key>
-	<string>Adds the Missing Picture-in-Picture functionality to Youtube, Netflix, Plex (Web), dailymotion</string>
+	<string>Adds the Missing Picture-in-Picture functionality to Youtube, Netflix, Plex (Web), dailymotion and Realmadrid TV</string>
 	<key>DeveloperIdentifier</key>
 	<string>0000000000</string>
 	<key>ExtensionInfoDictionaryVersion</key>

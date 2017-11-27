@@ -311,6 +311,22 @@
                 customClasses: null
             },
             {
+
+                name: 'realmadrid',
+                testPattern: /(realmadrid\.com|www\.realmadrid\.com)/,
+                customLoadEvent: {
+                    name: 'initialized',
+                    method: findVideos,
+                    loaded: false
+                },
+                elementType: 'button',
+                videoSelector: 'video',
+                buttonClassList: 'vjs-control vjs-button pip-button',
+                videoParentClass: '.m_stream_player',
+                controlsWrapperClass: '.vjs-control-bar',
+                customClasses: null
+            },
+            {
                 name: 'amazon',
                 testPattern: /(amazon\.com|www\.amazon\.com|amazon\.de|www\.amazon\.de)/,
                 customLoadEvent: {
