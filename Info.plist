@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>Joe Kuhns (Forked from Bogdan Matei)</string>
 	<key>Builder Version</key>
-	<string>12602.2.14.0.7</string>
+	<string>13604.3.5</string>
 	<key>CFBundleDisplayName</key>
 	<string>PiPTool</string>
 	<key>CFBundleIdentifier</key>
@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.100</string>
+	<string>2.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.100</string>
+	<string>2.0</string>
 	<key>Companion Bundle Identifier</key>
 	<array>
 		<string>com.meridianprinting.safari.PiedPiPr</string>
@@ -33,6 +33,27 @@
 		<array>
 			<string>stylesheets/main.css</string>
 		</array>
+		<key>Whitelist</key>
+		<array>
+			<string>http://*.youtube.com/*</string>
+			<string>http://*.youtu.be/*</string>
+			<string>http://*.plex.tv/*</string>
+			<string>http://*.dailymotion.com/*</string>
+			<string>http://*.netflix.com/*</string>
+			<string>https://*.youtube.com/*</string>
+			<string>https://*.youtu.be/*</string>
+			<string>https://*.plex.tv/*</string>
+			<string>https://*.dailymotion.com/*</string>
+			<string>https://*.netflix.com/*</string>
+			<string>http://*.amazon.com/*</string>
+			<string>https://*.amazon.com/*</string>
+			<string>http://*.amazon.de/*</string>
+			<string>https://*.amazon.de/*</string>
+			<string>http://realmadrid.com</string>
+			<string>http://*.realmadrid.com</string>
+			<string>https://realmadrid.com</string>
+			<string>https://*.realmadrid.com</string>
+		</array>
 	</dict>
 	<key>Description</key>
 	<string>Adds the Missing Picture-in-Picture functionality to Youtube, Netflix, Plex (Web), dailymotion and Realmadrid TV</string>
@@ -44,28 +65,15 @@
 	<dict>
 		<key>Website Access</key>
 		<dict>
-			<key>Allowed Domains</key>
-			<array>
-				<string>*.youtube.com</string>
-				<string>youtube.com</string>
-				<string>youtu.be</string>
-				<string>*.youtu.be</string>
-				<string>plex.tv</string>
-				<string>*.plex.tv</string>
-				<string>dailymotion.com</string>
-				<string>*.dailymotion.com</string>
-				<string>netflix.com</string>
-				<string>*.netflix.com</string>
-				<string>realmadrid.com</string>
-				<string>*.realmadrid.com</string>
-			</array>
 			<key>Include Secure Pages</key>
 			<true/>
 			<key>Level</key>
-			<string>Some</string>
+			<string>All</string>
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
 	<string>https://joekuhns.github.io/PiedPiPer.safariextension/Updates.plist</string>
+	<key>Website</key>
+	<string>https://joekuhns.github.io</string>
 </dict>
 </plist>
