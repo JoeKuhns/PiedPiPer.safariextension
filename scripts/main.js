@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    
+
 //     monitorEvents(window);
 
     var resources,
@@ -14,24 +14,14 @@
         netflixObserver,
         netflixObserverTrigger,
         initPiPTool;
-        
-//         THIS IS THE SHOW HIDE FUNCTION FOR AMAZON
 
-
-function shower() {
-    document.getElementById('piper').style.visibility = "visible";
-  }
-  function hider() {
-    document.getElementById('piper').style.visibility = "hidden";
-  }
-        
-        
 
     /**
      * Add the PiP event and button to a given video
      * @param {Object} videoWrapper Video element to process
+     * @param {int} recursive_call an integer which counts how often the function called itself (used for amazon video)
      */
-    addPipButtons = function (videoWrapper) {
+    addPipButtons = function (videoWrapper, recursive_call = 0) {
         var pipButton,
             pipImage,
             video,
@@ -39,21 +29,44 @@ function shower() {
 
         /** @type {Object} The video to be switched */
         setTimeout(function(){
-	        
+
 	        video = videoWrapper.querySelector(currentResource.videoSelector);
-        
+
 	        if (currentResource.name == 'amazon') {
-	// 	        video = videoWrapper.querySelectorAll(currentResource.videoSelector);
-	        } 
-	        
+	             video = videoWrapper.querySelectorAll(currentResource.videoSelector);
+
+	            // If the amazon video isn't there yet recursively search for it
+	            if (video == null || video.length == 0 // Retry if video or its length is invalid
+					|| video[video.length-1].style.visibility == 'hidden' // Retry if the video is hidden
+					|| video[video.length-1].width == '1px' // Retry if the video is only 1 px wide
+					|| video[video.length-1].src.indexOf('videorolls') !== -1) { // Ignore video pre rolls (ads)
+
+					// Abort searching for a video after 500 retries
+	                if (recursive_call < 500) {
+						addPipButtons(videoWrapper, ++recursive_call);
+					}
+	                return;
+	            }
+
+	            console.log('Recursive call '+recursive_call+' found an amazon video!');
+	            var video = video[video.length-1];
+	        }
+
 	        console.log(video);
-	
+
+			// Remove all previously added pip buttons
+			var oldButtons = document.body.querySelectorAll('.pip-button');
+			Array.prototype.forEach.call( oldButtons, function( node ) {
+				node.parentNode.removeChild( node );
+			});
+
 	        /** @type {Object} The PiP button */
 	        pipButton = document.createElement(currentResource.elementType);
 	        pipButton.classList = currentResource.buttonClassList;
 	        pipButton.title = 'PiP Mode';
-	
+
 	        /** @type {Object} The icon shown in the PiP button */
+
             if (currentResource.name == 'youtube') { 
                 // svg must be inserted inline, otherwise youtube css style properties won't be inherited
                 pipButton.innerHTML = '<svg version="1.1" viewBox="0 0 36 36" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><use class="ytp-svg-shadow" xlink:href="#ytp-svg-90"></use><path class="ytp-svg-fill" d="M31,21v7H19v-7H31z M9,11h18v8h2v-8c0-1.1-0.9-2-2-2H9c-1.1,0-2,0.9-2,2v12c0,1.1,0.9,2,2,2h8v-2H9V11zM15,15.4l-3.6-3.5L10,13.3l3.7,3.7H11v2h4h2v-2v-4h-2V15.4z" id="ytp-svg-90"></path></svg>';
@@ -63,9 +76,10 @@ function shower() {
                 pipButton.appendChild(pipImage);                
             }
 	        
+
 	        pipButton.addEventListener('click', function (event) {
 	            event.preventDefault();
-	
+
 	            /** Swap the PiP mode */
 	            if ('inline' === video.webkitPresentationMode) {
 	                video.webkitSetPresentationMode('picture-in-picture');
@@ -73,14 +87,13 @@ function shower() {
 	                video.webkitSetPresentationMode('inline');
 	            }
 	        });
-	
-	        
-	
-		    controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
-	
+
+
+	        controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
+
 	        if (currentResource.name == 'netflix' && document.body.querySelectorAll('.pip-button').length < 1) {
 	// 	        document.body.appendChild(pipButton);
-		        document.querySelector('.player-status').appendChild(pipButton);
+	            document.querySelector('.player-status').appendChild(pipButton);
 	        } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
                 if (currentResource.name == 'youtube') {
                     // insert between airplay and fullscreen icon
@@ -90,24 +103,21 @@ function shower() {
                 }
 	        } else if (currentResource.name == 'weather' && document.body.querySelectorAll('.pip-button').length < 1) {
 	            document.querySelector('.akamai-controls .akamai-control-bar').appendChild(pipButton);
-	   
-	        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
-		        pipButton.id = 'piper';
-	
-		        document.body.appendChild(pipButton);
-		        console.log('Its Amazon');
-		        
-		        document.body.addEventListener('mouseover',function() { shower() },true);
-		        document.body.addEventListener('mouseout',function() { hider() },true);
-	
-	
-	        }
-        
 
-	        
+	        } else if (currentResource.name == 'amazon' && document.body.querySelectorAll('.pip-button').length < 1) {
+	            pipButton.id = 'piper';
+
+	            var hideableAmazonButtons = document.getElementsByClassName('hideableTopButtons');
+	            if (hideableAmazonButtons != null && hideableAmazonButtons.length > 0) {
+	                hideableAmazonButtons[0].firstChild.insertBefore(pipButton, hideableAmazonButtons[0].firstChild.firstChild);
+	                console.log('Amazon PiP button added');
+	            }
+	        }
+
+
         }, 50)
 
-        
+
     };
 
     /** Find the videos according to the current resource options */
@@ -117,15 +127,15 @@ function shower() {
 
         /** Fetch all the video elements */
         videoWrappers = document.querySelectorAll(currentResource.videoParentClass);
-        
+
         console.log(videoWrappers);
 
         for (videoWrapperIterator = 0; videoWrapperIterator < videoWrappers.length; videoWrapperIterator++) {
             addPipButtons(videoWrappers[videoWrapperIterator]);
         }
     };
-    
-    
+
+
 
     /** The method used to listen and trigger the event of finding the videos */
     netflixObserver = function (mutations) {
@@ -149,7 +159,7 @@ function shower() {
 
         /** Set the observer */
         observer.observe(document.querySelector(currentResource.customClasses.netflixContainer), {
-			childList: true, 
+			childList: true,
 		    subtree:true
         });
     };
@@ -161,34 +171,26 @@ function shower() {
 
     /** The method used to listen and trigger the event of finding the videos */
     amazonObserver = function (mutations) {
-// 	    console.log(mutations);
         mutations.forEach(function (mutation) {
             var addedNodesIterator;
 
-            for (addedNodesIterator = 0; addedNodesIterator < mutation.addedNodes.length; addedNodesIterator++) {
-                if (mutation.addedNodes[addedNodesIterator].classList && mutation.addedNodes[addedNodesIterator].classList.contains(currentResource.customClasses.videoClassObserver)) {
-                    findVideos();
-                }
-            }
+			if (mutation.target.classList.contains(currentResource.customClasses.videoClassObserver) && mutation.addedNodes.length > 0) {
+				findVideos();
+			}
         });
     };
 
     /** The trigger of the Plex Observer */
     amazonObserverTrigger = function () {
 
-	        console.log('Its Amazon');
-	        
-// 	        addPipButtons(document.body);
-
-
-        var observer;
+        console.log('Its Amazon');
 
         /** @type {MutationObserver} Initialize an observer */
-        observer = new MutationObserver(amazonObserver);
+        var observer = new MutationObserver(amazonObserver);
 
         /** Set the observer */
         observer.observe(document.querySelector(currentResource.customClasses.amazonContainer), {
-			childList: true, 
+			childList: true,
 		    subtree:true
         });
     };
@@ -310,7 +312,7 @@ function shower() {
             },
             {
                 name: 'amazon',
-                testPattern: /(amazon\.com|www\.amazon\.com)/,
+                testPattern: /(amazon\.com|www\.amazon\.com|amazon\.de|www\.amazon\.de)/,
                 customLoadEvent: {
                     name: 'load',
                     method: amazonObserverTrigger,
@@ -322,12 +324,12 @@ function shower() {
                 videoParentClass: '.rendererContainer',
                 controlsWrapperClass: '.controlsOverlayTopRight',
                 customClasses: {
-                    amazonContainer: '#dv-player-content',
+                    amazonContainer: '#dv-web-player',
                     videoClassObserver: 'rendererContainer'
                 }
             }
         ];
-        
+
 
         /** @type {Object} An object keeping the current platform options */
         currentResource = null;
@@ -351,5 +353,3 @@ function shower() {
 
     initPiPTool();
 }());
-
-
