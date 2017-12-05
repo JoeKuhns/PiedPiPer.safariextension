@@ -55,11 +55,11 @@
 					return;
 				}
 
-				console.log('Recursive call ' + recursive_call + ' found an amazon video!');
+				// console.log('Recursive call ' + recursive_call + ' found an amazon video!');
 				var video = video[video.length - 1];
 			}
 
-			console.log(video);
+			// console.log(video);
 
 			/** @type {Object} The PiP button */
 			pipButton = document.createElement(currentResource.elementType);
@@ -111,7 +111,7 @@
 				var hideableAmazonButtons = document.getElementsByClassName('hideableTopButtons');
 				if (hideableAmazonButtons != null && hideableAmazonButtons.length > 0) {
 					hideableAmazonButtons[0].firstChild.insertBefore(pipButton, hideableAmazonButtons[0].firstChild.firstChild);
-					console.log('Amazon PiP button added');
+					// console.log('Amazon PiP button added');
 				}
 			}
 
@@ -127,7 +127,7 @@
 		/** Fetch all the video elements */
 		videoWrappers = document.querySelectorAll(currentResource.videoParentClass);
 
-		console.log(videoWrappers);
+		// console.log(videoWrappers);
 
 		for (videoWrapperIterator = 0; videoWrapperIterator < videoWrappers.length; videoWrapperIterator++) {
 			addPipButtons(videoWrappers[videoWrapperIterator]);
@@ -183,7 +183,7 @@
 	/** The trigger of the Plex Observer */
 	amazonObserverTrigger = function() {
 
-		console.log('Its Amazon');
+		// console.log('Its Amazon');
 
 		/** @type {MutationObserver} Initialize an observer */
 		var observer = new MutationObserver(amazonObserver);
