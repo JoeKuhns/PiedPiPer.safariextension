@@ -49,6 +49,8 @@
 			<string>https://*.amazon.com/*</string>
 			<string>http://*.amazon.de/*</string>
 			<string>https://*.amazon.de/*</string>
+			<string>http://*.amazon.co.uk/*</string>
+			<string>https://*.amazon.co.uk/*</string>
 		</array>
 	</dict>
 	<key>Description</key>
