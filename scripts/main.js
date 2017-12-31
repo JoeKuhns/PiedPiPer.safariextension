@@ -73,9 +73,8 @@
             } else {
                 pipImage = document.createElement('img');
                 pipImage.src = safari.extension.baseURI + 'images/' + currentResource.name + '-icon.svg';
-                pipButton.appendChild(pipImage);                
+                pipButton.appendChild(pipImage);
             }
-	        
 
 	        pipButton.addEventListener('click', function (event) {
 	            event.preventDefault();
@@ -92,8 +91,9 @@
 	        controlsWrapper = videoWrapper.querySelector(currentResource.controlsWrapperClass);
 
 	        if (currentResource.name == 'netflix' && document.body.querySelectorAll('.pip-button').length < 1) {
-	// 	        document.body.appendChild(pipButton);
-	            document.querySelector('.player-status').appendChild(pipButton);
+                document.querySelector('.PlayerControls--button-control-row').appendChild(pipButton);
+                var sim = pipButton.parentElement.querySelector("button");
+                pipButton.className = pipButton.className + " " + sim.className;
 	        } else if (controlsWrapper && 0 === controlsWrapper.querySelectorAll('.pip-button').length) {
                 if (currentResource.name == 'youtube') {
                     // insert between airplay and fullscreen icon
@@ -127,8 +127,6 @@
 
         /** Fetch all the video elements */
         videoWrappers = document.querySelectorAll(currentResource.videoParentClass);
-
-        console.log(videoWrappers);
 
         for (videoWrapperIterator = 0; videoWrapperIterator < videoWrappers.length; videoWrapperIterator++) {
             addPipButtons(videoWrappers[videoWrapperIterator]);
@@ -286,13 +284,13 @@
                     loaded: false
                 },
 
-                elementType: 'span',
+                elementType: 'button',
                 videoSelector: 'video',
                 buttonClassList: 'netflix-pip',
-                videoParentClass: '.player-video-wrapper',
+                videoParentClass: '.VideoContainer',
                 customClasses: {
                     netflixContainer: '#appMountPoint',
-                    videoClassObserver: 'player-menu'
+                    videoClassObserver: 'AkiraPlayer'
                 }
             },
             {
